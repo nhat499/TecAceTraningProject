@@ -9,7 +9,19 @@
   "author": "Nhat Trang",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
+    "cor": "^0.0.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
-    "express": "^4.18.1"
-  }
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "node-fetch": "^3.2.9",
+    "xml2js": "^0.4.23"
+  },
+  "proxy": 8000
 }
