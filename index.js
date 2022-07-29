@@ -35,7 +35,7 @@ app.use('/jwt', verifyToken, jwtInfo);
 app.use('/signOut', verifyToken, signOut);
 
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 7000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}...`);
 });
