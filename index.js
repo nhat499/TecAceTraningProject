@@ -25,9 +25,9 @@ app.use(cors({
   origin: process.env.CLIENT_URL
 }));
 app.use(parser.json());
-app.use('/get', get);
+//app.use('/get', get);
 app.use('/get', checkToken, get);
-// app.use('/signIn' ,signIn);
+app.use('/signIn' ,signIn);
 app.use('/edit', verifyToken, edit);
 app.use('/insert', verifyToken, insert);
 app.use('/remove', verifyToken, remove);
