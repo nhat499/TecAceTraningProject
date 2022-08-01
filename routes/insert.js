@@ -13,7 +13,7 @@ router.post('/topic', async (req,res, next) => {
     else {
         util.insertTopicCommentReply(undefined, userId, topic, "topic")
         .then(()=> { res.status(200).send({status:200,message:"topic inserted"})})
-        .catch((err) => { res.status(500).send({status:500, message: err})});
+        .catch((err) => {res.status(500).send({status:500, message: err})});
     }
 });
 

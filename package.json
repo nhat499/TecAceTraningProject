@@ -21,6 +21,8 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "node-fetch": "^3.2.9",
+    "socket.io": "^4.5.1",
+    "socketio": "^1.0.0",
     "xml2js": "^0.4.23"
   },
   "proxy": 8000

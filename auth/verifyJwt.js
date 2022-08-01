@@ -29,7 +29,8 @@ const checkToken = (req, res, next) => {
     } catch (err) {
       return res.status(466).send({
         status:401,
-        message:"Invalid Token"
+        message:"Invalid Token",
+        error: err
       });
     }
   }

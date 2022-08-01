@@ -5,7 +5,7 @@ const util = require('../utils/queries.js')
 
 // get all topic
 router.get('/topics', (req, res, next) => {
-
+  
   const sql = `SELECT Topics.topicId as topicId, Topics.userId as userId, 
               topic, numLikes, numComments, timePost, firstName, 
               lastName, CASE WHEN LikesTopic.TopicId IS NOT NULL THEN true ELSE false END as liked
@@ -15,10 +15,13 @@ router.get('/topics', (req, res, next) => {
                 LEFT JOIN 
                 (SELECT * FROM LikesTopic WHERE userId = ?) as LikesTopic
                 on LikesTopic.topicId = Topics.topicId
-                ORDER BY numLikes DESC, timePost DESC;`; // DO SAOME THING FOR COMMNET/ REPLIES AFTER LUNCH
+                WHERE topic LIKE ?
+                ORDER BY timePost DESC, numLikes DESC;`; // DO SAOME THING FOR COMMNET/ REPLIES AFTER LUNCH
     let userId = '';
+    let search = '%%';
+    if (req.query.search) search = `%${req.query.search}%`;
     if (req.user) userId = req.user.userId;
-    db.query(sql, [userId],(err, result) => {
+    db.query(sql, [userId,search],(err, result) => {
       if (err) next();
       else res.status(200).send({
         user: req.user, 
