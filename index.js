@@ -18,6 +18,8 @@ const io = new Server(server, {
   }
 })
 
+const io2 = io.of('/api/socket.io');
+
 app.use(cors({
   origin: ['http://localhost:3000', 'http://34.216.189.30'],
     allowedHeaders: ['origin', 'X-Requested-With','content-type','X-Auth-Token'],
@@ -61,7 +63,7 @@ app.use('/signOut', verifyToken, signOut);
 
 
 
-io.on('connection', (socket) => {
+io2.on('connection', (socket) => {
   console.log(`a new connection: ${socket.id}`);
 
   socket.on('topicUpdated', () => {
