@@ -10,7 +10,7 @@ const corHeader = require('./utils/access_control.js');
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://34.216.189.30'],
+    origin: '*',
     allowedHeaders: ['origin', 'X-Requested-With','content-type','X-Auth-Token'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     supports_credentials:true,
@@ -19,7 +19,7 @@ const io = new Server(server, {
 })
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://34.216.189.30'],
+  origin: '*',
     allowedHeaders: ['origin', 'X-Requested-With','content-type','X-Auth-Token'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     supports_credentials:true,
