@@ -18,8 +18,8 @@ const io = new Server(server, {
   }
 })
 
-const io2 = io;
-//const io2 = io.of('/api/');
+//const io2 = io;
+const io2 = io.of('/api/');
 
 app.use(cors({
   origin: ['http://localhost:3000', 'http://34.216.189.30'],
