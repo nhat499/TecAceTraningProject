@@ -6,9 +6,11 @@ const util = require('../utils/queries.js')
 // get all topic
 router.get('/topics', (req, res, next) => {
   
-  const sql = `SELECT Topics.topicId as topicId, Topics.userId as userId, 
+  const sql = `SELECT COUNT(*) as totalTopic from Topics WHERE topic LIKE ?;
+              SELECT Topics.topicId as topicId, Topics.userId as userId, 
               topic, numLikes, numComments, timePost, firstName, 
               lastName, CASE WHEN LikesTopic.TopicId IS NOT NULL THEN true ELSE false END as liked
+          
 				      FROM Topics
                 LEFT JOIN Users
                 ON Topics.userId = Users.userId
@@ -16,23 +18,33 @@ router.get('/topics', (req, res, next) => {
                 (SELECT * FROM LikesTopic WHERE userId = ?) as LikesTopic
                 on LikesTopic.topicId = Topics.topicId
                 WHERE topic LIKE ?
-                ORDER BY timePost DESC, numLikes DESC;`; // DO SAOME THING FOR COMMNET/ REPLIES AFTER LUNCH
+                ORDER BY timePost DESC, numLikes DESC
+                LIMIT ?, 6;`; // DO SAOME THING FOR COMMNET/ REPLIES AFTER LUNCH
+                //     count(Topics.topicId) as total
     let userId = '';
     let search = '%%';
-    if (req.query.search) search = `%${req.query.search}%`;
+    let row = (parseInt(req.query.page) - 1) * 6;
+    if (req.query.search)
+      search = `%${req.query.search}%`;
+    
     if (req.user) userId = req.user.userId;
-    db.query(sql, [userId,search],(err, result) => {
-      if (err) next();
+    
+    db.query(sql, [search,userId,search, row],(err, result) => {
+      if (err) {
+        res.status(404).send({
+          status: 400,
+          Description: "Server problem",
+          error: err
+        })
+      }
       else res.status(200).send({
         user: req.user, 
-        result: result});
+        totalTopic: result[0][0].totalTopic,
+        result: result[1]});
     })
-  },(req, res) => {
-    res.status(404).send({
-      status: 400,
-      Description: "Server problem"
-    })
-});
+  }
+    
+);
 
 router.get('/topic/:topicId', async (req, res)=> {
   

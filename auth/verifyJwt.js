@@ -12,9 +12,14 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.user = decoded;
   } catch (err) {
-    return res.status(401).send({
-      status:401,
-      message:"Invalid Token"});
+    console.log(err);
+    res.clearCookie('token');
+    res.end();
+    return res.status(466).send({
+      status:466,
+      message:"session expire, please resignin",
+      error: err
+    });
   }
   return next();
 };
@@ -27,11 +32,15 @@ const checkToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.user = decoded;
     } catch (err) {
+      console.log(err);
+      res.clearCookie('token');
+      res.end();
       return res.status(466).send({
-        status:401,
-        message:"Invalid Token",
+        status:466,
+        message:"session expire, please resignin",
         error: err
       });
+      
     }
   }
   return next();

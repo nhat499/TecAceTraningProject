@@ -18,7 +18,8 @@ const io = new Server(server, {
   }
 })
 
-const io2 = io.of('/api/');
+const io2 = io;
+//const io2 = io.of('/api/');
 
 app.use(cors({
   origin: ['http://localhost:3000', 'http://34.216.189.30'],
@@ -42,6 +43,7 @@ const remove = require('./routes/remove.js');
 const signIn = require('./routes/signIn.js');
 const signOut = require('./routes/signOut.js');
 const jwtInfo = require('./routes/security/jwtInfo.js');
+const cookie = require('./auth/clearCookies.js');
 
 
 app.get('/test', (req, res) => {
@@ -60,7 +62,7 @@ app.use('/insert',verifyToken, insert);
 app.use('/remove',verifyToken, remove);
 app.use('/jwt', verifyToken, jwtInfo);
 app.use('/signOut', verifyToken, signOut);
-
+app.use('/clear', cookie)
 
 
 io2.on('connection', (socket) => {
@@ -75,15 +77,15 @@ io2.on('connection', (socket) => {
   })
 
   socket.on('commentUpdated', () => {
-    socket.broadcast.emit("commentUpdated");
+    io2.emit("commentUpdated");
   });
 
   socket.on('replyUpdated', () => {
-    socket.broadcast.emit("replyUpdated");
+    io2.emit("replyUpdated");
   });
 
   socket.on('navigateBack', () => {
-    socket.broadcast.emit('navigateBack')
+    io2.emit('navigateBack')
   })
 
   socket.on('disconnect', () => {
