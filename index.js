@@ -67,11 +67,11 @@ io2.on('connection', (socket) => {
   console.log(`a new connection: ${socket.id}`);
 
   socket.on('topicUpdated', () => {
-    socket.broadcast.emit("topicUpdated");
+    io2.emit("topicUpdated");
   });
 
   socket.on('singleTopicRefetch', () => {
-    socket.broadcast.emit("singleTopicRefetch");
+    io2.emit("singleTopicRefetch");
   })
 
   socket.on('commentUpdated', () => {
