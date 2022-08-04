@@ -7,10 +7,9 @@ const util = require('../utils/queries.js')
 router.get('/topics', (req, res, next) => {
   
   const sql = `SELECT COUNT(*) as totalTopic from Topics WHERE topic LIKE ?;
-              SELECT Topics.topicId as topicId, Topics.userId as userId, 
+              SELECT Topics.topicId as topicId, Users.profileImg as profileImg,Topics.userId as userId, 
               topic, numLikes, numComments, timePost, firstName, 
               lastName, CASE WHEN LikesTopic.TopicId IS NOT NULL THEN true ELSE false END as liked
-          
 				      FROM Topics
                 LEFT JOIN Users
                 ON Topics.userId = Users.userId
@@ -19,8 +18,7 @@ router.get('/topics', (req, res, next) => {
                 on LikesTopic.topicId = Topics.topicId
                 WHERE topic LIKE ?
                 ORDER BY timePost DESC, numLikes DESC
-                LIMIT ?, 6;`; // DO SAOME THING FOR COMMNET/ REPLIES AFTER LUNCH
-                //     count(Topics.topicId) as total
+                LIMIT ?, 6;`;
     let userId = '';
     let search = '%%';
     let row = (parseInt(req.query.page) - 1) * 6;
@@ -67,7 +65,7 @@ router.get('/comment/:topicId', (req, res, next) => {
   if (topicId === undefined) res.status(400).send({message:"topicId undefined"});
   else {
     const sql = `SELECT Comments.theComment, Comments.commentId, Comments.topicId, Users.userId, Comments.numLikes, 
-    Comments.numReply, Comments.timePost, Users.firstName, Users.lastName,
+    Comments.numReply, Users.profileImg as profileImg, Comments.timePost, Users.firstName, Users.lastName,
     CASE WHEN LikesComment.userId IS NOT NULL THEN true ELSE false END as liked
      FROM Comments 
                     LEFT JOIN Users
@@ -84,7 +82,6 @@ router.get('/comment/:topicId', (req, res, next) => {
   }
 });
 
-
 // get replies for a comment
 router.get('/reply/:commentId', (req, res, next) => {
   let userId = '';
@@ -92,7 +89,7 @@ router.get('/reply/:commentId', (req, res, next) => {
   const commentId = req.params.commentId;
   const sql = `SELECT Replies.replyId, Replies.reply, 
   Replies.commentId, Users.userId, Replies.numLikes, Replies.timePost, 
-  Users.firstName, Users.lastName, 
+  Users.firstName, Users.lastName, Users.profileImg as profileImg,
   case WHEN LikesReply.userId IS NOT NULL THEN true ELSE false END as liked
     FROM Replies
       LEFT JOIN Users
@@ -106,9 +103,6 @@ router.get('/reply/:commentId', (req, res, next) => {
     else res.status(200).send(result);
   });
 });
-
-// get userProfile
-
 
 // get all user (not needed but for testing purposes)
 router.get('/users', (req, res) => {

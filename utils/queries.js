@@ -93,10 +93,14 @@ async function insertTopicCommentReply(topicCommentId, userId, theTopicCommentRe
     });
 }
 
-async function insertUser(userId, firstName, lastName) {
+async function insertUser(userId, firstName, lastName, profileImg) {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO Users (userId, firstName, lastName) VALUES(?, ?, ?);`;
-        const data = [userId, firstName, lastName];
+        const sql = `INSERT INTO Users 
+        (userId, firstName, lastName, profileImg)
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        profileImg = ?;`;
+        const data = [userId, firstName, lastName, profileImg, profileImg];
         db.query(sql, data, (err, result) => {
             if (err) reject(err);
             else resolve();
@@ -117,7 +121,6 @@ async function insertLikeTopicCommentReply(userId, topicCommentReplyId, topicCom
         })
     })
 }
-
 
 // same function as in insert edit...
 async function getCommentReplyCount(topicCommentId, isReply) {
@@ -235,6 +238,7 @@ async function deleteLikeTopicCommentReply(userId, topicCommentReplyId, topicCom
 async function getTopicById(userId,topicId) { // REFACTOR COMMENT AND REPLIES
     return new Promise((resolve, reject) => {
         const sql = `SELECT Topics.topicId as topicId, Topics.userId as userId, 
+        Users.profileImg as profileImg,
         topic, numLikes, numComments, timePost, firstName, 
         lastName, CASE WHEN LikesTopic.TopicId IS NOT NULL THEN true ELSE false END as liked
                         FROM Topics
@@ -250,8 +254,6 @@ async function getTopicById(userId,topicId) { // REFACTOR COMMENT AND REPLIES
         })
     })
 }
-
-
 
 module.exports = {
     updateCommentReplyCount, 

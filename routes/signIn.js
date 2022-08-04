@@ -5,6 +5,8 @@ const fetchXMLInfo = require('../utils/fetchSignInfo.js');
 const createJwt = require('../auth/createJwt.js');
 const util = require('../utils/queries.js');
 
+// begin sign in
+// send user to samsung server
 router.get('/start', async(req, res) => {
     console.log('sign in begin: my server');
     // build url
@@ -22,6 +24,9 @@ router.get('/start', async(req, res) => {
     });
 });
 
+// if user successfully sign in
+// redirect back to home page
+// create jwt and store in cookies
 router.get('/next', async(req, res) => {
     if (req.query.code) {
         const url = `https://${req.query.auth_server_url}/auth/oauth2/token`
@@ -39,32 +44,33 @@ router.get('/next', async(req, res) => {
                     res.redirect(`${process.env.CLIENT_URL}/home/`);
                 })
             })
-        
-        // const jwt = updateDbCreateJwt(userInfo);
-        // res.cookie('token', jwt, {httpOnly: true});
-        // res.redirect('http://localhost:3000/home/');
-            
     }
 });
 
+// if user is not currently in database
+// add them
+// formate data for jwt
 async function updateDbCreateJwt(profile) {
     const userId = profile.guid;
     const firstName = profile.firstName;
     const lastName = profile.lastName;
-    if (!(await util.isValid(userId, 'user'))) { // user is not in db
-        await util.insertUser(userId, firstName, lastName);
-    }
+    let profileImg = profile.profileImg;
+    if (profileImg === '') profileImg = 'https://i.pinimg.com/736x/cb/45/72/cb4572f19ab7505d552206ed5dfb3739.jpg';
+    //if (!(await util.isValid(userId, 'user'))) { // user is not in db
+    await util.insertUser(userId, firstName, lastName, profileImg);
+    //}
     const data = {
         userId: userId,
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        profileImg: profileImg
     }
     const jwt = createJwt(data);
     return jwt;
 
 }
 
-
+// if user unsuccessful in signing in
 router.get('/cancel', async(req, res) => {
     console.log("cancel: here");
     console.log(req);

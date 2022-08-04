@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../connection/mysqldbconnect');
 const util = require('../utils/queries.js');
+
 // edit topic
 router.put("/topic", async (req,res) => {
     const userId = req.user.userId;  // CHANGE TO GET USERID FROM JWT REQ.DECODED
@@ -22,6 +22,7 @@ router.put("/topic", async (req,res) => {
     } 
 });
 
+// edit a comment
 router.put('/comment', async (req, res) => {
     const commentId = req.body.commentId; 
     const userId = req.user.userId;  // CHANGE TO GET USERID FROM JWT REQ.DECODED
@@ -38,8 +39,9 @@ router.put('/comment', async (req, res) => {
         })
         .catch((err) => {res.status(400).send(err)});
     }
-}) ;
+});
 
+// edit a reply
 router.put('/reply', async (req, res) => {
     const replyId = req.body.replyId;
     const userId = req.user.userId; // CHANGE TO GET USERID FROM JWT REQ.DECODED

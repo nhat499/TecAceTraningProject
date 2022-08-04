@@ -1,9 +1,9 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../connection/mysqldbconnect');
 const util = require('../utils/queries.js');
 
+// delete a reply
 router.delete('/reply', async (req, res) => {
     const userId = req.user.userId; // CHANGE TO GET USERID FROM JWT REQ.DECODED
     const replyId = req.body.replyId; // check valid reply id
@@ -24,6 +24,7 @@ router.delete('/reply', async (req, res) => {
     }
 })
 
+// delete a comment
 router.delete('/comment', async (req, res) => {
     const commentId = req.body.commentId;
     const userId = req.user.userId;
@@ -44,6 +45,7 @@ router.delete('/comment', async (req, res) => {
     }
 });
 
+// delete a topic
 router.delete('/topic', async (req, res) => {
     const topicId = req.body.topicId;
     const userId = req.user.userId;
@@ -58,6 +60,7 @@ router.delete('/topic', async (req, res) => {
     }
 });
 
+// delete a lick
 router.delete('/like', async (req, res) => {
     const userId = req.user.userId;
     const topicCommentReplyId =  req.body.topicCommentReplyId;
