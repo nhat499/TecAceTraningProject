@@ -16,8 +16,9 @@ const io = new Server(server, {
   }
 })
 
-const io2 = io;
-if (process.env.DEV_MODE === 'true') io2 = io.of('/api/');
+//const io2 = io;
+//if (process.env.DEV_MODE === 'true') 
+const io2 = io.of('/api/');
 
 app.use(cors({
   origin: ['http://localhost:3000', 'http://34.216.189.30'],
@@ -58,7 +59,7 @@ app.use('/signOut', verifyToken, signOut);
 //app.use('/clear', cookie)
 
 io2.on('connection', (socket) => {
-  //console.log(`a new connection: ${socket.id}`);
+  console.log(`a new connection: ${socket.id}`);
 
   socket.on('topicUpdated', () => {
     io2.emit("topicUpdated");
@@ -81,7 +82,7 @@ io2.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-    //console.log('a disconnected:', socket.id);
+    console.log('a disconnected:', socket.id);
   })
 });
 
