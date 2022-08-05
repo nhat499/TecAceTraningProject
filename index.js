@@ -16,7 +16,7 @@ const io = new Server(server, {
   }
 })
 
-//let io2 = io;
+// let io2 = io;
 //if (process.env.DEV_MODE === 'false') io2 = io.of('/api/');
 
 const io2 = io.of('/api/');
