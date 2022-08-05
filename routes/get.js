@@ -74,7 +74,7 @@ router.get('/comment/:topicId', (req, res, next) => {
                     (SELECT * FROM LikesComment WHERE userId =?) as LikesComment
                     on LikesComment.commentId = Comments.commentId
                     WHERE topicId = ?
-                    ORDER BY timePost DESC;`;
+                    ORDER BY numLikes DESC, timePost ASC;`;
     db.query(sql, [userId, topicId] ,(err, result) => {
       if (err) res.status(400).send(err);
       else res.status(200).send(result);
